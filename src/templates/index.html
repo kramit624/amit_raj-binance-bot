@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Binance Trading Bot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+    function toggleFields() {
+      var orderType = document.getElementById("order_type").value;
+      var allFields = document.querySelectorAll(".order-field");
+      allFields.forEach(field => field.style.display = "none");
+
+      // Show common fields for market and limit
+      if(orderType === "market" || orderType === "limit") {
+        document.getElementById("common_fields").style.display = "block";
+      }
+      // Stop-Limit fields
+      else if(orderType === "stop_limit") {
+        document.getElementById("common_fields").style.display = "block";
+        document.getElementById("stop_limit_fields").style.display = "block";
+      }
+      // OCO fields
+      else if(orderType === "oco") {
+        document.getElementById("common_fields").style.display = "block";
+        document.getElementById("oco_fields").style.display = "block";
+      }
+      // TWAP fields
+      else if(orderType === "twap") {
+        document.getElementById("twap_fields").style.display = "block";
+      }
+      // Grid fields
+      else if(orderType === "grid") {
+        document.getElementById("grid_fields").style.display = "block";
+      }
+    }
+
+    window.onload = function() {
+      toggleFields();
+    }
+  </script>
+  <style>
+    label { display: inline-block; width: 150px; margin-top: 10px; }
+    input, select { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Binance Trading Bot - Place Order</h2>
+
+  <form method="POST" action="/place_order">
+
+    <label>Symbol:</label><input type="text" name="symbol" required><br>
+
+    <label>Side (BUY/SELL):</label>
+    <select name="side" required>
+      <option value="BUY">BUY</option>
+      <option value="SELL">SELL</option>
+    </select><br>
+
+    <label>Order Type:</label>
+    <select id="order_type" name="order_type" onchange="toggleFields()" required>
+      <option value="market">Market</option>
+      <option value="limit">Limit</option>
+      <option value="stop_limit">Stop-Limit</option>
+      <option value="oco">OCO</option>
+      <option value="twap">TWAP</option>
+      <option value="grid">Grid</option>
+    </select><br>
+
+    <!-- Common fields for Market and Limit -->
+    <div id="common_fields" class="order-field">
+      <label>Quantity:</label><input type="number" step="0.0001" name="qty" required><br>
+      <div id="price_field">
+        <label>Price (Limit only):</label><input type="number" step="0.01" name="price"><br>
+      </div>
+    </div>
+
+    <!-- Stop-Limit fields -->
+    <div id="stop_limit_fields" class="order-field" style="display:none;">
+      <label>Stop Price:</label><input type="number" step="0.01" name="stop_price"><br>
+      <label>Limit Price:</label><input type="number" step="0.01" name="limit_price"><br>
+    </div>
+
+    <!-- OCO fields -->
+    <div id="oco_fields" class="order-field" style="display:none;">
+      <label>Price 1:</label><input type="number" step="0.01" name="price1"><br>
+      <label>Price 2:</label><input type="number" step="0.01" name="price2"><br>
+    </div>
+
+    <!-- TWAP fields -->
+    <div id="twap_fields" class="order-field" style="display:none;">
+      <label>Total Quantity:</label><input type="number" step="0.0001" name="qty"><br>
+      <label>Duration (seconds):</label><input type="number" name="duration" value="60"><br>
+      <label>Number of Parts:</label><input type="number" name="parts" value="5"><br>
+    </div>
+
+    <!-- Grid fields -->
+    <div id="grid_fields" class="order-field" style="display:none;">
+      <label>Quantity Per Order:</label><input type="number" step="0.0001" name="quantity_per_order"><br>
+      <label>Low Price:</label><input type="number" step="0.01" name="low_price"><br>
+      <label>High Price:</label><input type="number" step="0.01" name="high_price"><br>
+      <label>Number of Orders:</label><input type="number" name="grid_count" value="5"><br>
+    </div>
+
+    <button type="submit" style="margin-top:15px;">Place Order</button>
+  </form>
+</body>
+</html>
