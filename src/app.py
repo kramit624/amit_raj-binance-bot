@@ -29,7 +29,7 @@ def place_order():
     qty = request.form.get("qty")
     qty = float(qty) if qty else None
     
-    
+    # Initialize result
     result = None
     
     try:
@@ -77,5 +77,7 @@ def place_order():
         return f"❌ Exception: {str(e)}"
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
     print("Flask app is running at http://127.0.0.1:5000/")
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)
