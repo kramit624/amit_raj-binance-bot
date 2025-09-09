@@ -56,7 +56,7 @@ source venv/bin/activate
 Once the virtual environment is activated, install the required dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install -r src/requirements.txt
 ```
 
 ### 4. Set Up Binance Testnet API Keys
